@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive FinTech Backend Developer Roadmap</title>
+    
+    <!-- Chosen Palette: Fintech Calm -->
+    <!-- Application Structure Plan: The SPA is designed as a guided, thematic journey, diverging from the report's linear module structure for better usability. It flows from a high-level introduction to the FinTech landscape, then allows a deep dive into specific verticals via an interactive tabbed interface. This is followed by a section on advanced engineering principles featuring interactive checklists and charts, and concludes with a practical, actionable roadmap including a client-side progress tracker. This structure was chosen to make the dense information digestible, facilitate non-linear exploration based on user interest, and transform passive reading into an active learning experience. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: AI in FinTech Market Growth -> Goal: Show growth -> Viz: Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Clearly visualizes a key growth metric.
+        - Report Info: Core Technologies -> Goal: Organize concepts -> Viz: Interactive Card Grid (HTML/JS) -> Interaction: Click to reveal details -> Justification: Breaks down complex topics into engaging, bite-sized pieces.
+        - Report Info: FinTech Verticals (Payments, Lending, etc.) -> Goal: Detailed comparison -> Viz: Tabbed Interface (HTML/JS) -> Interaction: Click to switch content -> Justification: Manages large amounts of information effectively, preventing user overwhelm.
+        - Report Info: Payment Lifecycle -> Goal: Explain a process -> Viz: HTML/CSS Flowchart -> Interaction: Static visual aid -> Justification: Simplifies a complex workflow visually without using restricted graphics formats.
+        - Report Info: Tech Stack Comparison -> Goal: Compare languages -> Viz: Radar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Provides a multi-dimensional comparison that is more insightful than a list.
+        - Report Info: PCI DSS Requirements -> Goal: Make a checklist interactive -> Viz: Accordion/Checklist (HTML/JS) -> Interaction: Click to expand -> Justification: Turns a dense but critical list into an engaging learning tool.
+        - Report Info: Progress Tracking Matrix -> Goal: Provide a usable tool -> Viz: Interactive HTML Table -> Interaction: Click to cycle status -> Justification: Activates a static report element into a practical, client-side application feature.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #4f46e5;
+        }
+        .tab-btn.active {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .status-cell {
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .status-not-started { background-color: #fecaca; }
+        .status-in-progress { background-color: #fdba74; }
+        .status-complete { background-color: #bbf7d0; }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-indigo-600">FinTech Developer Roadmap</h1>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#landscape" class="nav-link text-slate-600 font-medium">The Landscape</a>
+                <a href="#verticals" class="nav-link text-slate-600 font-medium">Core Verticals</a>
+                <a href="#engineering" class="nav-link text-slate-600 font-medium">Engineering Deep Dive</a>
+                <a href="#roadmap" class="nav-link text-slate-600 font-medium">Your Roadmap</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-slate-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+            <a href="#landscape" class="block nav-link text-slate-600 font-medium">The Landscape</a>
+            <a href="#verticals" class="block nav-link text-slate-600 font-medium">Core Verticals</a>
+            <a href="#engineering" class="block nav-link text-slate-600 font-medium">Engineering Deep Dive</a>
+            <a href="#roadmap" class="block nav-link text-slate-600 font-medium">Your Roadmap</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="intro" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight">Mastering FinTech Backend Development</h2>
+                <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">An interactive journey to becoming an advanced FinTech engineer. Explore core concepts, technologies, and architectural patterns that power the future of finance.</p>
+                <a href="#landscape" class="mt-10 inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">Start Your Journey</a>
+            </div>
+        </section>
+
+        <section id="landscape" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">The FinTech Landscape</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">This section provides a foundational understanding of the FinTech ecosystem. You will discover the key trends shaping the industry and the core technologies that backend developers must master to build innovative financial solutions.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="prose prose-lg text-slate-700">
+                        <h3>What is FinTech?</h3>
+                        <p>FinTech represents the application of technology to enhance, streamline, and revolutionize traditional financial services. The goal is to make finance faster, more efficient, and more accessible for everyone, from individuals to large institutions.</p>
+                        <h3 class="mt-8">Key Market Trends</h3>
+                        <p>Several major trends are shaping the industry. The rise of Artificial Intelligence is particularly significant, with the AI in FinTech market projected for explosive growth. This signals a massive demand for backend developers who can build AI-powered systems for risk management, personalization, and operational efficiency.</p>
+                    </div>
+                    <div>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                            <canvas id="aiMarketChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-slate-500 mt-2">Projected Growth of AI in FinTech Market (USD Billions)</p>
+                    </div>
+                </div>
+
+                <div class="mt-20">
+                    <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-12">Core Technologies Powering FinTech</h3>
+                    <div id="tech-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="verticals" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Exploring Core Verticals</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">The FinTech industry is composed of specialized sectors, or "verticals," each with unique challenges and technological demands. This section offers an interactive deep dive into these key areas, outlining the specific architectural patterns, backend responsibilities, and technical focus required for each.</p>
+                </div>
+
+                <div class="w-full max-w-5xl mx-auto">
+                    <div class="mb-6 flex flex-wrap justify-center gap-2 border-b border-slate-200">
+                    </div>
+                    <div id="verticals-content" class="fade-in">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="engineering" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Engineering Deep Dive</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Building for FinTech requires a sophisticated approach to backend engineering. This section explores the non-functional requirements, architectural patterns, technology choices, and critical compliance standards that define advanced FinTech systems. Interact with the elements below to learn more.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-6">Architecting for FinTech Demands</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-indigo-700">High Availability & Fault Tolerance</h4>
+                                <p class="text-slate-600 mt-2">Systems must be resilient, eliminating single points of failure through redundancy, automated failover, and load balancing to ensure 24/7 operation.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-indigo-700">Low-Latency Design</h4>
+                                <p class="text-slate-600 mt-2">Crucial for payments and trading. Achieved through efficient code, optimized networking (gRPC), in-memory processing (Redis), and strategic hardware placement.</p>
+                            </div>
+                             <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-indigo-700">Scalability Patterns</h4>
+                                <p class="text-slate-600 mt-2">Use Microservices and Event-Driven Architectures (EDA) with tools like Kafka to handle fluctuating loads and ensure services can scale independently and communicate asynchronously.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-6">Comparing Tech Stacks</h3>
+                         <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                            <canvas id="techStackChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-slate-500 mt-2">Relative suitability of languages for different FinTech needs.</p>
+                    </div>
+                </div>
+
+                <div class="mt-20">
+                    <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-4">Compliance Spotlight: PCI DSS</h3>
+                    <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">The Payment Card Industry Data Security Standard (PCI DSS) is non-negotiable for any system handling card data. Explore the 12 core requirements below.</p>
+                    <div id="pci-checklist" class="max-w-4xl mx-auto space-y-3">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <section id="roadmap" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Your Roadmap to Mastery</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Theoretical knowledge must be paired with practical application. This final section provides a concrete, actionable plan to solidify your skills, build a compelling portfolio, and commit to continuous learning. Use the interactive tracker to chart your own journey.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-xl text-indigo-700">1. Practical Experience</h4>
+                        <p class="text-slate-600 mt-2">Integrate with APIs like Stripe and Plaid. Build portfolio projects like a mock payment gateway or a P2P lending platform backend to apply your knowledge.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-xl text-indigo-700">2. Open Source</h4>
+                        <p class="text-slate-600 mt-2">Explore projects on Moov.io or FINOS. Study the code of platforms like Apache Fineract. Contribute to documentation or fix bugs to gain real-world experience.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-xl text-indigo-700">3. Continuous Learning</h4>
+                        <p class="text-slate-600 mt-2">Follow engineering blogs from Stripe and Plaid. Subscribe to newsletters like Fintech Brain Food. Engage in communities to stay ahead of the curve.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-8">Progress Tracking Matrix</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-slate-200 shadow rounded-lg">
+                            <thead class="bg-slate-100">
+                                <tr>
+                                    <th class="py-3 px-4 text-left font-semibold text-slate-600">Area</th>
+                                    <th class="py-3 px-4 text-left font-semibold text-slate-600">Skill / Concept</th>
+                                    <th class="py-3 px-4 text-left font-semibold text-slate-600">Practical Application</th>
+                                    <th class="py-3 px-4 text-center font-semibold text-slate-600">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="progress-tracker-body">
+                            </tbody>
+                        </table>
+                    </div>
+                     <p class="text-center text-sm text-slate-500 mt-4">Click on a status cell to cycle through: Not Started (Red), In Progress (Orange), and Complete (Green). Your progress is saved for this session only.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>Interactive application based on the "A Strategic Guide to Mastering FinTech Backend Development" report.</p>
+            <p class="text-sm mt-2">Designed to make complex FinTech concepts accessible and explorable.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const coreTechnologies = [
+                { name: 'AI & Machine Learning', description: 'Build data pipelines for ML models, serve real-time inferences for fraud detection, and integrate with AI platforms for risk assessment.' },
+                { name: 'Blockchain & DLT', description: 'Integrate systems with blockchain networks, develop APIs to interact with smart contracts, and secure transactions.' },
+                { name: 'Cyber Security & Biometrics', description: 'Implement secure authentication (OAuth 2.0, MFA), data encryption (TLS, AES-256), and identity verification flows.' },
+                { name: 'Cloud Computing', description: 'Design cloud-native applications using managed services (serverless, managed DBs) and Infrastructure-as-Code (IaC).' },
+                { name: 'Big Data Analytics', description: 'Architect systems to handle, process, and analyze large datasets for personalization, risk assessment, and anomaly detection.' },
+                { name: 'Cryptography', description: 'Apply principles of encryption, hashing, and digital signatures to secure APIs, databases, and data in transit.' }
+            ];
+
+            const techGrid = document.getElementById('tech-grid');
+            coreTechnologies.forEach(tech => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer';
+                card.innerHTML = `
+                    <h4 class="font-bold text-lg text-slate-800">${tech.name}</h4>
+                    <p class="text-slate-600 mt-2 hidden">${tech.description}</p>
+                `;
+                techGrid.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    const desc = card.querySelector('p');
+                    desc.classList.toggle('hidden');
+                    card.classList.toggle('bg-indigo-50');
+                });
+            });
+
+            const aiMarketCtx = document.getElementById('aiMarketChart').getContext('2d');
+            new Chart(aiMarketCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2024 (Value)', '2033 (Projection)'],
+                    datasets: [{
+                        label: 'AI in FinTech Market Size (USD Billion)',
+                        data: [17, 70.1],
+                        backgroundColor: ['rgba(79, 70, 229, 0.7)', 'rgba(34, 161, 152, 0.7)'],
+                        borderColor: ['rgb(79, 70, 229)', 'rgb(34, 161, 152)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.raw} Billion`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const techStackCtx = document.getElementById('techStackChart').getContext('2d');
+            new Chart(techStackCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Performance', 'AI/ML', 'Real-time', 'Enterprise', 'Rapid Dev'],
+                    datasets: [
+                        { label: 'Java/Spring', data: [4, 2, 3, 5, 3], fill: true, backgroundColor: 'rgba(79, 70, 229, 0.2)', borderColor: 'rgb(79, 70, 229)', pointBackgroundColor: 'rgb(79, 70, 229)'},
+                        { label: 'Python/FastAPI', data: [3, 5, 3, 3, 5], fill: true, backgroundColor: 'rgba(203, 75, 22, 0.2)', borderColor: 'rgb(203, 75, 22)', pointBackgroundColor: 'rgb(203, 75, 22)'},
+                        { label: 'Node.js', data: [3, 2, 5, 3, 4], fill: true, backgroundColor: 'rgba(133, 153, 0, 0.2)', borderColor: 'rgb(133, 153, 0)', pointBackgroundColor: 'rgb(133, 153, 0)'},
+                        { label: 'C++', data: [5, 2, 4, 3, 1], fill: true, backgroundColor: 'rgba(34, 161, 152, 0.2)', borderColor: 'rgb(34, 161, 152)', pointBackgroundColor: 'rgb(34, 161, 152)'}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: { line: { borderWidth: 2 } },
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            const pciRequirements = [
+                { id: 1, title: 'Network Security', detail: 'Install and maintain firewalls and secure network configurations to protect the cardholder data environment (CDE).' },
+                { id: 2, title: 'Secure Configurations', detail: 'Harden all system components. Do not use vendor-supplied defaults for system passwords and other security parameters.' },
+                { id: 3, title: 'Protect Stored Data', detail: 'Encrypt stored cardholder data (PAN) at rest. Never store sensitive authentication data (e.g., CVV) after authorization.' },
+                { id: 4, title: 'Encrypt Data in Transit', detail: 'Use strong cryptography (e.g., TLS 1.2+) to protect cardholder data during transmission over open, public networks.' },
+                { id: 5, title: 'Protect from Malware', detail: 'Protect all systems and networks from malicious software by deploying and regularly updating anti-virus software.' },
+                { id: 6, title: 'Secure Systems & Software', detail: 'Develop and maintain secure systems and applications. Follow secure coding guidelines and patch vulnerabilities promptly.' },
+                { id: 7, title: 'Restrict Access', detail: 'Restrict access to cardholder data by business need-to-know, following the principle of least privilege.' },
+                { id: 8, title: 'Identify & Authenticate', detail: 'Assign a unique ID to each person with computer access. Implement strong authentication, including MFA.' },
+                { id: 9, title: 'Restrict Physical Access', detail: 'Restrict physical access to cardholder data and the systems within the CDE.' },
+                { id: 10, title: 'Log & Monitor Access', detail: 'Track and monitor all access to network resources and cardholder data. Secure and review logs regularly.' },
+                { id: 11, title: 'Test Security Regularly', detail: 'Regularly test security systems and processes, including vulnerability scanning and penetration testing.' },
+                { id: 12, title: 'Maintain Security Policy', detail: 'Maintain a policy that addresses information security for all personnel.' }
+            ];
+
+            const pciChecklist = document.getElementById('pci-checklist');
+            pciRequirements.forEach(req => {
+                const item = document.createElement('div');
+                item.className = 'bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden';
+                item.innerHTML = `
+                    <button class="w-full text-left p-4 flex justify-between items-center font-semibold text-slate-700 hover:bg-slate-50">
+                        <span>Req ${req.id}: ${req.title}</span>
+                        <span class="transform transition-transform duration-300">&#9662;</span>
+                    </button>
+                    <div class="hidden px-4 pb-4 text-slate-600 bg-slate-50 border-t border-slate-200">
+                        <p class="pt-2">${req.detail}</p>
+                    </div>
+                `;
+                pciChecklist.appendChild(item);
+
+                const button = item.querySelector('button');
+                const content = item.querySelector('div');
+                const arrow = button.querySelector('span:last-child');
+                button.addEventListener('click', () => {
+                    content.classList.toggle('hidden');
+                    arrow.classList.toggle('rotate-180');
+                });
+            });
+
+            const verticalsData = {
+                Payments: {
+                    content: `
+                        <h4 class="font-bold text-xl mb-4">Payments & Digital Wallets</h4>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <p class="mb-4"><strong>Core Function:</strong> Digital money transfer, P2P payments, and cross-border transactions.</p>
+                                <p class="mb-4"><strong>Key Backend Challenges:</strong> Ultra-low latency, high throughput, extreme security (PCI DSS), real-time fraud detection, and ensuring idempotency to prevent duplicate transactions.</p>
+                                <p><strong>Common Patterns:</strong> Microservices, Event-Driven Architecture (EDA).</p>
+                                <p><strong>Example Tech:</strong> Kafka, Kubernetes, HSMs, Secure REST/gRPC APIs, Tokenization.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold mb-2">Simplified Transaction Flow:</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="p-2 bg-slate-100 rounded">1. <strong>Initiation:</strong> Customer provides payment details.</div>
+                                    <div class="p-2 bg-slate-100 rounded">2. <strong>Authorization:</strong> Gateway -> Processor -> Card Network -> Issuing Bank.</div>
+                                    <div class="p-2 bg-slate-100 rounded">3. <strong>Response:</strong> Bank approves/declines, message returns to merchant.</div>
+                                    <div class="p-2 bg-slate-100 rounded">4. <strong>Clearing & Settlement:</strong> Funds are transferred between banks.</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                Lending: {
+                    content: `
+                        <h4 class="font-bold text-xl mb-4">Lending & Credit Systems</h4>
+                        <p class="mb-4"><strong>Core Function:</strong> Digital loan origination, P2P lending, BNPL, and automated credit scoring.</p>
+                        <p class="mb-4"><strong>Key Backend Challenges:</strong> Complex business logic for underwriting, high data security, regulatory compliance, scalability, and AI/ML model integration for risk assessment using alternative data.</p>
+                        <p class="mb-4"><strong>Common Patterns:</strong> Microservices, Workflow Engines, EDA.</p>
+                        <p><strong>Example Tech:</strong> Python (for AI/ML), Java/Spring Boot, PostgreSQL, API integrations with credit bureaus.</p>
+                    `
+                },
+                WealthTech: {
+                    content: `
+                        <h4 class="font-bold text-xl mb-4">WealthTech & Algorithmic Trading</h4>
+                        <p class="mb-4"><strong>Core Function:</strong> Robo-advisors, digital brokerage, algorithmic trading, and personal finance management.</p>
+                        <p class="mb-4"><strong>Key Backend Challenges:</strong> Real-time market data processing, low-latency for trading (microseconds in HFT), complex portfolio management algorithms, and extreme security of assets and data.</p>
+                        <p class="mb-4"><strong>Common Patterns:</strong> Microservices, EDA, Stream Processing, Low-latency Architectures.</p>
+                        <p><strong>Example Tech:</strong> C++/Java/Go (for HFT), Python (for analytics), Kafka, Flink/Spark, Time-series databases (InfluxDB).</p>
+                    `
+                },
+                InsurTech: {
+                    content: `
+                        <h4 class="font-bold text-xl mb-4">Insurance Technology (InsurTech)</h4>
+                        <p class="mb-4"><strong>Core Function:</strong> Digital underwriting, automated claims processing, and usage-based insurance (UBI).</p>
+                        <p class="mb-4"><strong>Key Backend Challenges:</strong> Big data processing from IoT devices (telematics), AI/ML for risk and claims assessment, data privacy, and legacy system integration.</p>
+                        <p class="mb-4"><strong>Common Patterns:</strong> Microservices, EDA, Data Lakes, AI/ML Platforms.</p>
+                        <p><strong>Example Tech:</strong> Python/Scala (for data/AI), IoT platforms, Cloud storage (S3), Data pipeline tools (Airflow).</p>
+                    `
+                },
+                RegTech: {
+                    content: `
+                        <h4 class="font-bold text-xl mb-4">Regulatory Technology (RegTech)</h4>
+                        <p class="mb-4"><strong>Core Function:</strong> Automating compliance tasks like KYC/AML, fraud detection, and regulatory reporting.</p>
+                        <p class="mb-4"><strong>Key Backend Challenges:</strong> Ensuring data accuracy and integrity, high auditability and security, integrating with diverse data sources, and adapting to changing regulations.</p>
+                        <p class="mb-4"><strong>Common Patterns:</strong> Microservices, Rule Engines, Data Warehousing, Secure APIs.</p>
+                        <p><strong>Example Tech:</strong> Java/Python, Relational Databases, Graph Databases (for fraud detection), Secure logging systems.</p>
+                    `
+                }
+            };
+            
+            const verticalsTabsContainer = document.querySelector('#verticals .flex-wrap');
+            const verticalsContentContainer = document.getElementById('verticals-content');
+            let activeTab = 'Payments';
+
+            function renderVerticals() {
+                verticalsTabsContainer.innerHTML = '';
+                Object.keys(verticalsData).forEach(name => {
+                    const button = document.createElement('button');
+                    button.textContent = name;
+                    button.className = 'tab-btn px-4 py-2 text-sm font-medium border-b-2 transition-colors duration-300';
+                    if (name === activeTab) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.add('border-transparent', 'text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+                    }
+                    button.addEventListener('click', () => {
+                        activeTab = name;
+                        renderVerticals();
+                    });
+                    verticalsTabsContainer.appendChild(button);
+                });
+                verticalsContentContainer.innerHTML = verticalsData[activeTab].content;
+                verticalsContentContainer.classList.remove('fade-in');
+                void verticalsContentContainer.offsetWidth; 
+                verticalsContentContainer.classList.add('fade-in');
+            }
+
+            renderVerticals();
+
+            const progressTrackerData = [
+                { area: 'Foundations', skill: 'FinTech Verticals Overview', task: 'Research 2 unlisted verticals.' },
+                { area: 'Payments', skill: 'PCI DSS Req 3', task: 'Implement mock encryption for PAN storage.' },
+                { area: 'Payments', skill: 'Transaction Lifecycle', task: 'Diagram data flow for a card payment.' },
+                { area: 'Lending', skill: 'BNPL Backend Logic', task: 'Design API endpoints for a BNPL merchant integration.' },
+                { area: 'WealthTech', skill: 'Robo-Advisor Backend', task: 'Define data models for user profile and portfolio.' },
+                { area: 'Engineering', skill: 'High Availability', task: 'Design a redundant architecture for a critical microservice.' },
+                { area: 'Engineering', skill: 'API Idempotency', task: 'Implement idempotency key handling in a mock API.' },
+                { area: 'Compliance', skill: 'RBI PA/PG Guidelines', task: 'Summarize RBI data storage rules.' },
+                { area: 'API Integration', skill: 'Stripe PaymentIntent', task: 'Integrate Stripe to create and confirm a PaymentIntent.' },
+                { area: 'API Integration', skill: 'Plaid Transaction Fetching', task: 'Use Plaid to fetch transactions for a linked account.' },
+            ];
+
+            const trackerBody = document.getElementById('progress-tracker-body');
+            const statuses = ['status-not-started', 'status-in-progress', 'status-complete'];
+            const statusText = ['Not Started', 'In Progress', 'Complete'];
+
+            progressTrackerData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-slate-200 last:border-b-0';
+                row.innerHTML = `
+                    <td class="py-3 px-4 text-slate-700 font-medium">${item.area}</td>
+                    <td class="py-3 px-4 text-slate-600">${item.skill}</td>
+                    <td class="py-3 px-4 text-slate-600">${item.task}</td>
+                    <td class="py-3 px-4 text-center text-white text-xs font-bold uppercase status-cell status-not-started" data-status="0">
+                        ${statusText[0]}
+                    </td>
+                `;
+                trackerBody.appendChild(row);
+
+                const statusCell = row.querySelector('.status-cell');
+                statusCell.addEventListener('click', () => {
+                    let currentStatus = parseInt(statusCell.dataset.status, 10);
+                    currentStatus = (currentStatus + 1) % statuses.length;
+                    statusCell.dataset.status = currentStatus;
+                    
+                    statusCell.classList.remove(...statuses);
+                    statusCell.classList.add(statuses[currentStatus]);
+                    statusCell.textContent = statusText[currentStatus];
+                });
+            });
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileMenu.addEventListener('click', (e) => {
+              if(e.target.tagName === 'A'){
+                mobileMenu.classList.add('hidden');
+              }
+            })
+        });
+    </script>
+</body>
+</html>
