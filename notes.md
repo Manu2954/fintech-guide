@@ -1,0 +1,1 @@
+whenever you want a structured req or structured res make a pydantic model for it in schemas/
